@@ -1,8 +1,10 @@
 import os
 from flask import Flask
+from flask_restplus import Api
 from flask_sqlalchemy import SQLAlchemy
 
 db =SQLAlchemy()
+api = Api(prefix='/api/v1')
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -22,9 +24,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    api.init_app(app)
+    from apps.auth_app import urls
     db.init_app(app)
-    from apps.auth_app.urls import auth_blueprint
-    app.register_blueprint(auth_blueprint)
     return app
 
 app = create_app()
